@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>教师登录</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+
+<form method="post">
+
+    {% load form_extra %}
+    <div class="errors">
+        {{ errors|dump_errors }}
+
+    </div>
+    <label for="userid" >学工号:</label>
+    <input id="userid" name="number_id" type="text">
+    <label for="password" >密码:</label>
+    <input id="password" name="pwd" type="text">
+    <div class="test validate">
+        {#验证码模块#}
+        <img src="{{ img_url }}" alt="captcha" class="captcha">
+        <input id="id_validate_0" name="validate_0" type="hidden" value="{{ img_hashKey }}">
+        <input autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" id="id_validate_1" name="validate_1" type="text">
+
+    </div>
+    <script type="text/javascript">
+        {#刷新#}
+        $('.captcha').click(function(){
+            console.log('click');
+            $.getJSON("/captcha/refresh/",
+                function(result){
+                    $('.captcha').attr('src', result['image_url']);
+                    $('#id_validate_0').val(result['key'])
+                });
+        });
+    </script>
+
+
+    <input type="submit" value="登录">
+    {% csrf_token %}
+</form>
+
+</body>
+</html>
